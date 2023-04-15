@@ -11,6 +11,8 @@
   font-family: "iconfont" !important;
   font-size: 20px;
   font-style: normal;
+  /* TODO */
+  display: var(--fa-display,inline-block);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
