@@ -1,0 +1,12 @@
+@font-face {
+    font-family: 'FiraCode';
+    font-display: swap;
+    src: url('/fonts/FiraCode-Medium.otf') format("opentype");
+}
+
+@font-face {
+	font-family: 'AlimamaDongFangDaKai';
+	font-weight: 400;
+	font-display: swap;
+	src:url(https://puhuiti.oss-cn-hangzhou.aliyuncs.com/AlimamaDongFangDaKai/AlimamaDongFangDaKai-Regular/AlimamaDongFangDaKai-Regular.otf) format('opentype');
+}

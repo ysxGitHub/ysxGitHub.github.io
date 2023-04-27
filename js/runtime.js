@@ -6,7 +6,7 @@ function createtime() {
   var e = new Date("04/03/2023 00:00:00"),
     t = Math.trunc(234e8 + ((now - e) / 1e3) * 17),
     a = (t / 1496e5).toFixed(6),
-    o = new Date("04/04/2023 00:00:00"),
+    o = new Date("04/03/2023 00:00:00"),
     n = (now - o) / 1e3 / 60 / 60 / 24,
     r = Math.floor(n),
     i = (now - o) / 1e3 / 60 / 60 - 24 * r,
@@ -20,7 +20,7 @@ function createtime() {
   1 == String(b).length && (b = "0" + b);
   let c = "";
   (c =
-    `<div style="font-size:13px;font-weight:bold">©2022-${year} By ysx</div>
+    `<div style="font-size:13px;font-weight:bold">©️2023-${year} By ysx</div>
      <div style="font-size:13px;font-weight:bold">本站居然运行了 ${r} 天 ${s} 小时 ${l} 分 ${b} 秒
         <i id="heartbeat" class="fa fas fa-heartbeat"></i>
         <br>
