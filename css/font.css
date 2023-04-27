@@ -1,11 +1,11 @@
 @font-face {
-    font-family: 'FiraCode';
+    font-family: FiraCode;
     font-display: swap;
-    src: url('/fonts/FiraCode-Regular.woff2') format("woff2");
+    src: url('/fonts/FiraCode-Regular.woff2') format('woff2');
 }
 
 @font-face {
-	font-family: 'AlimamaDongFangDaKai';
+	font-family: AlimamaDongFangDaKai;
 	font-display: swap;
-	src: url(https://puhuiti.oss-cn-hangzhou.aliyuncs.com/AlimamaDongFangDaKai/AlimamaDongFangDaKai-Regular/AlimamaDongFangDaKai-Regular.woff2) format('woff2');
+	src: url('https://puhuiti.oss-cn-hangzhou.aliyuncs.com/AlimamaDongFangDaKai/AlimamaDongFangDaKai-Regular/AlimamaDongFangDaKai-Regular.woff2') format('woff2');
 }
