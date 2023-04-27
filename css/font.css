@@ -6,7 +6,6 @@
 
 @font-face {
 	font-family: 'AlimamaDongFangDaKai';
-	font-weight: 400;
 	font-display: swap;
-	src:url(https://puhuiti.oss-cn-hangzhou.aliyuncs.com/AlimamaDongFangDaKai/AlimamaDongFangDaKai-Regular/AlimamaDongFangDaKai-Regular.otf) format('opentype');
+	src: url(https://puhuiti.oss-cn-hangzhou.aliyuncs.com/AlimamaDongFangDaKai/AlimamaDongFangDaKai-Regular/AlimamaDongFangDaKai-Regular.otf) format('opentype');
 }
