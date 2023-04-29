@@ -1,0 +1,708 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><!-- hexo injector head_begin start --><style type="text/css">.douban-card-block {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-height: 400px;
+}
+
+.douban-card {
+    display: flex;
+    margin: 30px 10px;
+    padding: 15px;
+    border-radius: 15px;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    color: antiquewhite;
+    text-decoration: none;
+}
+
+.douban-card:hover {
+    text-decoration: none;
+}
+
+.douban-card-bgimg {
+    position: absolute;
+    width: 115%;
+    height: 115%;
+    filter: blur(15px) brightness(0.6);
+    background-size: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.douban-card-img {
+    position: relative;
+    height: 130px;
+    width: 80px;
+    background-size: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.douban-card-left:hover .douban-card-img {
+    filter: blur(5px) brightness(0.6);
+    transform: perspective(800px) rotateX(180deg);
+}
+
+.douban-card-left .douban-card-img {
+    transition: all 500ms ease;
+}
+
+.douban-card-left {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.douban-card-left .douban-card-status {
+    height: 130px;
+    width: 80px;
+    text-align: center;
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+    top: 30%;
+    transform: rotateX(180deg);
+    backface-visibility: hidden;
+    transition: all 500ms ease;
+}
+
+.douban-card-left:hover .douban-card-status {
+    transform: perspective(800px) rotateX(0deg);
+}
+
+.douban-card-right {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    margin-left: 12px;
+    font-size: 16px;
+    font-family: "Courier New", Courier, monospace;
+    line-height: 1.3;
+    color: antiquewhite;
+}
+
+.douban-card-item {
+    margin-top: 4px;
+}
+</style><!-- hexo injector head_begin end --><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"><title>Java virtual machines 入门 | 木川羽</title><meta name="author" content="ysx"><meta name="copyright" content="ysx"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="本章主要介绍 Java virtual machines 的内存结构等相关知识">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java virtual machines 入门">
+<meta property="og:url" content="http://ysxnote.cn/posts/c0646373.html">
+<meta property="og:site_name" content="木川羽">
+<meta property="og:description" content="本章主要介绍 Java virtual machines 的内存结构等相关知识">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ysxnote.oss-cn-hangzhou.aliyuncs.com/imgs/posts/jvm.png">
+<meta property="article:published_time" content="2023-04-28T06:30:08.000Z">
+<meta property="article:modified_time" content="2023-04-29T12:26:05.208Z">
+<meta property="article:author" content="ysx">
+<meta property="article:tag" content="JVM">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ysxnote.oss-cn-hangzhou.aliyuncs.com/imgs/posts/jvm.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://ysxnote.cn/posts/c0646373.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":100,"languages":{"author":"作者: ysx","link":"链接: ","source":"来源: 木川羽","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: true,
+  islazyload: true,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: true,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Java virtual machines 入门',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-04-29 20:26:05'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><svg aria-hidden="true" style="position:absolute; overflow:hidden; width:0; height:0"><symbol id="icon-sun" viewBox="0 0 1024 1024"><path d="M960 512l-128 128v192h-192l-128 128-128-128H192v-192l-128-128 128-128V192h192l128-128 128 128h192v192z" fill="#FFD878" p-id="8420"></path><path d="M736 512a224 224 0 1 0-448 0 224 224 0 1 0 448 0z" fill="#FFE4A9" p-id="8421"></path><path d="M512 109.248L626.752 224H800v173.248L914.752 512 800 626.752V800h-173.248L512 914.752 397.248 800H224v-173.248L109.248 512 224 397.248V224h173.248L512 109.248M512 64l-128 128H192v192l-128 128 128 128v192h192l128 128 128-128h192v-192l128-128-128-128V192h-192l-128-128z" fill="#4D5152" p-id="8422"></path><path d="M512 320c105.888 0 192 86.112 192 192s-86.112 192-192 192-192-86.112-192-192 86.112-192 192-192m0-32a224 224 0 1 0 0 448 224 224 0 0 0 0-448z" fill="#4D5152" p-id="8423"></path></symbol><symbol id="icon-moon" viewBox="0 0 1024 1024"><path d="M611.370667 167.082667a445.013333 445.013333 0 0 1-38.4 161.834666 477.824 477.824 0 0 1-244.736 244.394667 445.141333 445.141333 0 0 1-161.109334 38.058667 85.077333 85.077333 0 0 0-65.066666 135.722666A462.08 462.08 0 1 0 747.093333 102.058667a85.077333 85.077333 0 0 0-135.722666 65.024z" fill="#FFB531" p-id="11345"></path><path d="M329.728 274.133333l35.157333-35.157333a21.333333 21.333333 0 1 0-30.165333-30.165333l-35.157333 35.157333-35.114667-35.157333a21.333333 21.333333 0 0 0-30.165333 30.165333l35.114666 35.157333-35.114666 35.157334a21.333333 21.333333 0 1 0 30.165333 30.165333l35.114667-35.157333 35.157333 35.157333a21.333333 21.333333 0 1 0 30.165333-30.165333z" fill="#030835" p-id="11346"></path></symbol></svg><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/cursor.css"><link rel="stylesheet" href="/css/custom.css"><link rel="stylesheet" href="/css/icon.css"><link rel="stylesheet" href="/css/scroll-bar.css"><link rel="stylesheet" href="/css/top-pace.css"><link rel="stylesheet" href="/css/headwave.css"><link rel="stylesheet" href="/css/year.css"><link rel="stylesheet" href="/css/person-bg.css"><link rel="stylesheet" href="/icon/iconfont.css"><link rel="stylesheet" href="/css/poem-color.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/js-heo@1.0.11/poem/poem.css"><link rel="stylesheet" href="/css/home-notices.css"><link rel="stylesheet" href="/css/font.css"><!-- hexo injector head_end start --><link rel="stylesheet" href="https://fastly.jsdelivr.net/gh/HCLonely/images@master/others/heartbeat.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload="this.media='all'"><script src="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/carousel-touch.js"></script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://ysxnote.oss-cn-hangzhou.aliyuncs.com/imgs/logo.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">12</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw iconfont icon-shouye"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw iconfont icon-rili"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw iconfont icon-biaoqian"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw iconfont icon-fenlei"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw iconfont icon-gerenxinxi"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://ysxnote.oss-cn-hangzhou.aliyuncs.com/imgs/posts/jvm.png')"><nav id="nav"><span id="blog-info"><a href="/" title="木川羽"><span class="site-name">木川羽</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw iconfont icon-shouye"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw iconfont icon-rili"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw iconfont icon-biaoqian"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw iconfont icon-fenlei"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw iconfont icon-gerenxinxi"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Java virtual machines 入门</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-04-28T06:30:08.000Z" title="发表于 2023-04-28 14:30:08">2023-04-28</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-04-29T12:26:05.208Z" title="更新于 2023-04-29 20:26:05">2023-04-29</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Java/">Java</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">3,317</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>14分钟</span></span></div></div></div><section class="main-hero-waves-area waves-area"><svg class="waves-svg" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto"><defs><path id="gentle-wave" d="M -160 44 c 30 0 58 -18 88 -18 s 58 18 88 18 s 58 -18 88 -18 s 58 18 88 18 v 44 h -352 Z"></path></defs><g class="parallax"><use href="#gentle-wave" x="48" y="0"></use><use href="#gentle-wave" x="48" y="3"></use><use href="#gentle-wave" x="48" y="5"></use><use href="#gentle-wave" x="48" y="7"></use></g></svg></section></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="1-引言">1. 引言</h2>
+<h3 id="1-1-什么是-JVM">1.1 什么是 JVM ?</h3>
+<p><strong>定义</strong>：</p>
+<p>Java Virtual Machine - java 程序的运行环境（java 二进制字节码的运行环境）</p>
+<p><strong>好处</strong>：</p>
+<ul>
+<li>一次编写，到处运行</li>
+<li>自动内存管理，垃圾回收功能</li>
+<li>数组下标越界检查</li>
+<li>多态</li>
+</ul>
+<p><strong>比较 jvm jre jdk</strong>：</p>
+<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://ysxnote.oss-cn-hangzhou.aliyuncs.com/imgs/posts/jvm-jre-jdk.png" alt="jvm jre jdk 关系" style="zoom:63%;">
+<h3 id="1-2-常见的-JVM">1.2 常见的 JVM</h3>
+<ul>
+<li>Eclipse OpenJ9</li>
+<li>GCJ</li>
+<li>GraalVM</li>
+<li>HotSpot，OpenJDK edition</li>
+<li>HotSpot，Oracle JDK edition</li>
+</ul>
+<h3 id="1-3-学习路线">1.3 学习路线</h3>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://ysxnote.oss-cn-hangzhou.aliyuncs.com/imgs/posts/jvm-something.png" alt="jvm 相关知识"></p>
+<h2 id="2-内存结构">2. 内存结构</h2>
+<ul>
+<li>程序计数器</li>
+<li>虚拟机栈</li>
+<li>本地方法栈</li>
+<li>堆</li>
+<li>方法区</li>
+</ul>
+<h3 id="2-1-程序计数器">2.1 程序计数器</h3>
+<h4 id="2-1-1-定义">2.1.1 定义</h4>
+<p>Program Counter Register 程序计数器（寄存器）</p>
+<ul>
+<li><strong>作用</strong>是记住下一条jvm指令的执行地址</li>
+<li><strong>特点</strong>
+<ul>
+<li>是线程私有的</li>
+<li>不会存在内存溢出</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-2-虚拟机栈">2.2 虚拟机栈</h3>
+<h4 id="2-2-1-定义">2.2.1 定义</h4>
+<p>Java Virtual Machine Stacks （Java 虚拟机栈）</p>
+<ul>
+<li>每个线程运行时所需要的<mark class="hl-label orange">内存</mark> ，称为虚拟机栈</li>
+<li>每个栈由多个<mark class="hl-label orange">栈帧（Frame）</mark> 组成，<font color="red">对应着每次方法调用时所占用的内存</font></li>
+<li>每个线程只能有<strong>一个</strong>活动栈帧，对应着当前正在执行的那个方法</li>
+</ul>
+<p><strong>问题辨析</strong></p>
+<ol>
+<li>
+<p>垃圾回收是否涉及栈内存？</p>
+ <div class="hide-block"><button type="button" class="hide-button" style="background-color:  #FF7242;color:  #fff">查看答案
+    </button><div class="hide-content"><p>垃圾回收涉及堆内存</p>
+</div></div>
+</li>
+<li>
+<p>栈内存分配越大越好吗？</p>
+ <div class="hide-block"><button type="button" class="hide-button" style="background-color:  #FF7242;color:  #fff">查看答案
+    </button><div class="hide-content"><p>不是，栈内存越大线程数目越少</p>
+</div></div>
+</li>
+<li>
+<p>方法内的局部变量是否线程安全？</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color:  #FF7242;color:  #fff">查看答案
+    </button><div class="hide-content"><ul>
+<li>
+<p>如果方法内局部变量没有逃离方法的作用访问，它是线程安全的</p>
+</li>
+<li>
+<p>如果是局部变量引用了对象，并逃离方法的作用范围，需要考虑线程安全</p>
+</li>
+</ul>
+</div></div>
+</li>
+</ol>
+<h4 id="2-2-2-栈内存溢出-StackOverflow">2.2.2 栈内存溢出 - <em>StackOverflow</em></h4>
+<ol>
+<li>栈帧过多导致栈内存溢出</li>
+</ol>
+<ul>
+<li>VM options中设置栈内存大小参数：<code>-Xss1024k</code></li>
+</ul>
+<p>无限递归示例：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">StackOverflow</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            method1();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Throwable e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">            <span class="comment">// -Xss1024kb 26659</span></span><br><span class="line">            <span class="comment">// -Xss512kb  8775</span></span><br><span class="line">            <span class="comment">// -Xss256kb  2731</span></span><br><span class="line">            log.info(<span class="string">&quot;&quot;</span>+count);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">method1</span><span class="params">()</span> &#123;</span><br><span class="line">        count++;</span><br><span class="line">        method1();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>循环引用示例：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">StackOverflow</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> JsonProcessingException &#123;</span><br><span class="line">        <span class="type">Dept</span> <span class="variable">d</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Dept</span>();</span><br><span class="line">        d.setName(<span class="string">&quot;Market&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="type">Emp</span> <span class="variable">e1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Emp</span>();</span><br><span class="line">        e1.setName(<span class="string">&quot;zhang&quot;</span>);</span><br><span class="line">        e1.setDept(d);</span><br><span class="line"></span><br><span class="line">        <span class="type">Emp</span> <span class="variable">e2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Emp</span>();</span><br><span class="line">        e2.setName(<span class="string">&quot;li&quot;</span>);</span><br><span class="line">        e2.setDept(d);</span><br><span class="line"></span><br><span class="line">        d.setEmps(Arrays.asList(e1, e2));</span><br><span class="line"></span><br><span class="line">        <span class="comment">// &#123; name: &#x27;Market&#x27;, emps: [&#123; name:&#x27;zhang&#x27;, dept:&#123; name:&#x27;&#x27;, emps: [ &#123;&#125;]&#125; &#125;,] &#125;</span></span><br><span class="line">        <span class="type">ObjectMapper</span> <span class="variable">mapper</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectMapper</span>();</span><br><span class="line">       log.info(mapper.writeValueAsString(d));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Emp</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 解决循环引用的问题</span></span><br><span class="line">    <span class="comment">// @JsonIgnore</span></span><br><span class="line">    <span class="keyword">private</span> Dept dept;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getName</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setName</span><span class="params">(String name)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Dept <span class="title function_">getDept</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> dept;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setDept</span><span class="params">(Dept dept)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.dept = dept;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Dept</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> List&lt;Emp&gt; emps;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getName</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setName</span><span class="params">(String name)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> List&lt;Emp&gt; <span class="title function_">getEmps</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> emps;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setEmps</span><span class="params">(List&lt;Emp&gt; emps)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.emps = emps;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>栈帧过大导致栈内存溢出（不好模拟）</li>
+</ol>
+<h4 id="2-2-3-线程运行诊断">2.2.3 线程运行诊断</h4>
+<p><strong>案例1</strong>： cpu 占用过多</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CPUHigh</span> &#123;</span><br><span class="line">    <span class="comment">// 这个案例只适合单核CPU演示</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">Thread</span> <span class="variable">t1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;</span><br><span class="line">            <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, <span class="string">&quot;t1&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="type">Thread</span> <span class="variable">t2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                Thread.sleep(<span class="number">1000000000000L</span>);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(e);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, <span class="string">&quot;t2&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="type">Thread</span> <span class="variable">t3</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                Thread.sleep(<span class="number">1000000000000L</span>);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(e);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, <span class="string">&quot;t3&quot;</span>);</span><br><span class="line"></span><br><span class="line">        t3.start();</span><br><span class="line">        t2.start();</span><br><span class="line">        t1.start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>定位</strong></p>
+<ul>
+<li>用<code>top</code>定位哪个进程对cpu的占用过高</li>
+<li><code>ps H -eo pid,tid,%cpu | grep 进程id</code> （用<code>ps</code>命令进一步定位是哪个线程引起的cpu占用过高）</li>
+<li><code>jstack 进程id</code>
+<ul>
+<li>可以根据线程 id 找到有问题的线程，进一步定位到问题代码的源码行号</li>
+</ul>
+</li>
+</ul>
+<p><strong>案例2</strong>：程序运行很长时间没有结果，存在活锁或死锁之类的问题</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DeadLock</span> &#123;</span><br><span class="line">    <span class="keyword">class</span> <span class="title class_">A</span>&#123; &#125;</span><br><span class="line">    <span class="keyword">class</span> <span class="title class_">B</span>&#123; &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException &#123;</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(()-&gt;&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (A.class) &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    Thread.sleep(<span class="number">2000</span>);</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(e);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">synchronized</span> (B.class) &#123;</span><br><span class="line">                    log.info(<span class="string">&quot;A OK ?&quot;</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,<span class="string">&quot;t1&quot;</span>).start();</span><br><span class="line"></span><br><span class="line">        Thread.sleep(<span class="number">1000</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(()-&gt;&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (B.class) &#123;</span><br><span class="line">                <span class="keyword">synchronized</span> (A.class) &#123;</span><br><span class="line">                    log.info(<span class="string">&quot;B OK ?&quot;</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,<span class="string">&quot;t2&quot;</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="2-3-本地方法栈">2.3 本地方法栈</h3>
+<ul>
+<li>类似于虚拟机栈，区别是虚拟机栈为执行 <strong>Java 方法</strong>服务, 而本地方法栈则为<strong>Native 方法</strong>服务。 允许被实现成固定或者是可动态扩展的内存大小。</li>
+<li><strong>Native Method</strong>就是一个java调用非java代码的接口。一个Native Method是这样一个java的方法：该方法的实现由非java语言实现，比如C。</li>
+</ul>
+<h3 id="2-4-堆">2.4 堆</h3>
+<h4 id="2-4-1-定义">2.4.1 定义</h4>
+<p><strong>Heap 堆</strong></p>
+<ul>
+<li>通过 new 关键字，创建对象都会使用堆内存</li>
+</ul>
+<p><strong>特点</strong></p>
+<ul>
+<li>它是线程共享的，堆中对象都需要考虑线程安全的问题</li>
+<li>有垃圾回收机制</li>
+</ul>
+<h4 id="2-4-2-堆内存溢出-OutOfMemoryError">2.4.2 堆内存溢出 - <em>OutOfMemoryError</em></h4>
+<ul>
+<li>VM options 中设置堆内存大小参数：<code>-Xmx8m</code></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">OutOfMemoryError</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            method1();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Throwable e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">            <span class="comment">// -Xmx8m   17</span></span><br><span class="line">            <span class="comment">// -Xmx64m  20</span></span><br><span class="line">            <span class="comment">// -Xmx128m 21</span></span><br><span class="line">            log.info(<span class="string">&quot;&quot;</span>+count);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">method1</span><span class="params">()</span> &#123;</span><br><span class="line">        ArrayList&lt;String&gt; list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">        <span class="type">String</span> <span class="variable">a</span> <span class="operator">=</span> <span class="string">&quot;hello&quot;</span>;</span><br><span class="line">        <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">            list.add(a);</span><br><span class="line">            a = a + a;</span><br><span class="line">            count++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="2-4-3-堆内存诊断">2.4.3 堆内存诊断</h4>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">HeapTest</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException &#123;</span><br><span class="line">        log.info(<span class="string">&quot;1...&quot;</span>);</span><br><span class="line">        Thread.sleep(<span class="number">30000</span>);</span><br><span class="line">        <span class="type">byte</span>[] array = <span class="keyword">new</span> <span class="title class_">byte</span>[<span class="number">1024</span> * <span class="number">1024</span> * <span class="number">10</span>]; <span class="comment">//10mb</span></span><br><span class="line">        log.info(<span class="string">&quot;2...&quot;</span>);</span><br><span class="line">        Thread.sleep(<span class="number">30000</span>);</span><br><span class="line">        array = <span class="literal">null</span>;</span><br><span class="line">        System.gc();</span><br><span class="line">        log.info(<span class="string">&quot;3...&quot;</span>);</span><br><span class="line">        Thread.sleep(<span class="number">100000000L</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li><code>jps </code>工具</li>
+</ol>
+<ul>
+<li>查看当前系统中有哪些 java 进程</li>
+</ul>
+<ol start="2">
+<li>jmap 工具</li>
+</ol>
+<ul>
+<li>查看堆内存占用情况<code>jmap - heap 进程id</code></li>
+</ul>
+<ol start="3">
+<li><code>jconsole</code> 工具</li>
+</ol>
+<ul>
+<li>图形界面的，多功能的监测工具，可以连续监测</li>
+</ul>
+<p><strong>案例</strong></p>
+<p>垃圾回收后，内存占用仍然很高</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 演示查看对象个数 堆转储 dump</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Demo1_13</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException &#123;</span><br><span class="line">        List&lt;Student&gt; students = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">200</span>; i++) &#123;</span><br><span class="line">            students.add(<span class="keyword">new</span> <span class="title class_">Student</span>());</span><br><span class="line">            <span class="comment">// tudent student = new Student();</span></span><br><span class="line">        &#125;</span><br><span class="line">        Thread.sleep(<span class="number">1000000000L</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Student</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">byte</span>[] big = <span class="keyword">new</span> <span class="title class_">byte</span>[<span class="number">1024</span>*<span class="number">1024</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>jvisualvm</code> 工具</li>
+</ul>
+<h3 id="2-5-方法区">2.5 方法区</h3>
+<h4 id="2-5-1-定义">2.5.1 定义</h4>
+<p>Java虚拟机有一个在所有Java虚拟机线程之间<mark class="hl-label orange">共享</mark> 的方法区域。它存储每个类的结构，如<mark class="hl-label orange">运行时常量池</mark> 、<mark class="hl-label orange">字段</mark> 和<mark class="hl-label orange">方法数据</mark> ，以及<mark class="hl-label orange">方法</mark> 和<mark class="hl-label orange">构造器的代码</mark> ，包括在类和实例初始化和接口初始化中使用的特殊方法。</p>
+<p><font color="red">方法区域在虚拟机启动时创建。</font>虽然方法区域在逻辑上是堆的一部分，但简单的实现可能不会对其进行垃圾收集或压缩。方法区域的大小可以是固定的，或者可以根据计算的需要进行扩展，如果不需要较大的方法区域，则可以收缩。方法区域的内存不需要是连续的。</p>
+<p>Java虚拟机实现可以让程序员或用户控制方法区域的初始大小，在方法区域大小可变的情况下，还可以控制最大和最小方法区域的大小。</p>
+<p>与方法区域相关的异常情况如下:</p>
+<p>如果方法区域中的内存无法满足分配请求，Java虚拟机将抛出一个。<code>OutOfMemoryError</code></p>
+<h4 id="2-5-2-组成">2.5.2 组成</h4>
+<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://ysxnote.oss-cn-hangzhou.aliyuncs.com/imgs/posts/jvm-memory1.png" alt="JVM 内存结构 1.6" style="zoom:60%;">
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://ysxnote.oss-cn-hangzhou.aliyuncs.com/imgs/posts/jvm-memory2.png" alt="JVM 内存结构 1.8"></p>
+<h4 id="2-5-3-方法区内存溢出">2.5.3 方法区内存溢出</h4>
+<p>1.8 以前会导致永久代内存溢出</p>
+<p>* 演示永久代内存溢出 <code>java.lang.OutOfMemoryError: PermGen space</code></p>
+<p>* VM options填写 <code>-XX:MaxPermSize=8m</code></p>
+<p>1.8 之后会导致元空间内存溢出</p>
+<p>* 演示元空间内存溢出 <code>java.lang.OutOfMemoryError: Metaspace</code></p>
+<p>* VM options填写 <code>-XX:MaxMetaspaceSize=8m</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MethodSpaceOutOfMemory</span> <span class="keyword">extends</span> <span class="title class_">ClassLoader</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="type">MethodSpaceOutOfMemory</span> <span class="variable">test</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MethodSpaceOutOfMemory</span>();</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++, j++) &#123;</span><br><span class="line">                <span class="comment">// ClassWriter 作用是生成类的二进制字节码</span></span><br><span class="line">                <span class="type">ClassWriter</span> <span class="variable">cw</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ClassWriter</span>(<span class="number">0</span>);</span><br><span class="line">                <span class="comment">// 版本号， public， 类名, 包名, 父类， 接口</span></span><br><span class="line">                cw.visit(Opcodes.V1_8, Opcodes.ACC_PUBLIC, <span class="string">&quot;Class&quot;</span> + i, <span class="literal">null</span>, <span class="string">&quot;java/lang/Object&quot;</span>, <span class="literal">null</span>);</span><br><span class="line">                <span class="comment">// 返回 byte[]</span></span><br><span class="line">                <span class="type">byte</span>[] code = cw.toByteArray();</span><br><span class="line">                <span class="comment">// 执行了类的加载</span></span><br><span class="line">                test.defineClass(<span class="string">&quot;Class&quot;</span> + i, code, <span class="number">0</span>, code.length); <span class="comment">// Class 对象</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="comment">// -XX:MaxMetaspaceSize=12m   7491</span></span><br><span class="line">            log.info(j+<span class="string">&quot;&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>方法区内存溢出的场景</p>
+<ul>
+<li>spring</li>
+<li>mybatis</li>
+</ul>
+<h4 id="2-5-4-运行时常量池">2.5.4 运行时常量池</h4>
+<ul>
+<li>常量池，就是一张表，虚拟机指令根据这张常量表找到要执行的<strong>类名</strong>、<strong>方法名</strong>、<strong>参数类型</strong>、<strong>字面量</strong>等信息</li>
+<li>运行时常量池，常量池是 *.class  文件中的，当该类被加载，它的常量池信息就会放入运行时常量池，并<font color="red">把里面的符号地址变为真实地址</font></li>
+</ul>
+<h4 id="2-5-5-StringTable">2.5.5 StringTable</h4>
+<p>StringTable也叫串池，它的数据结构是<strong>hashtable，长度固定，不能扩容</strong>。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// StringTable [ &quot;a&quot;, &quot;b&quot; ,&quot;ab&quot; ]  hashtable 结构，不能扩容</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">StringTable</span> &#123;</span><br><span class="line">    <span class="comment">// 常量池中的信息，都会被加载到运行时常量池中， 这时 a b ab 都是常量池中的符号，还没有变为 java 字符串对象</span></span><br><span class="line">    <span class="comment">// ldc #2 会把 a 符号变为 &quot;a&quot; 字符串对象</span></span><br><span class="line">    <span class="comment">// ldc #3 会把 b 符号变为 &quot;b&quot; 字符串对象</span></span><br><span class="line">    <span class="comment">// ldc #4 会把 ab 符号变为 &quot;ab&quot; 字符串对象</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">s1</span> <span class="operator">=</span> <span class="string">&quot;a&quot;</span>; <span class="comment">// 懒惰的</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">s2</span> <span class="operator">=</span> <span class="string">&quot;b&quot;</span>;</span><br><span class="line">        <span class="type">String</span> <span class="variable">s3</span> <span class="operator">=</span> <span class="string">&quot;ab&quot;</span>;</span><br><span class="line">        <span class="type">String</span> <span class="variable">s4</span> <span class="operator">=</span> s1 + s2; <span class="comment">// new StringBuilder().append(&quot;a&quot;).append(&quot;b&quot;).toString()  new String(&quot;ab&quot;)</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">s5</span> <span class="operator">=</span> <span class="string">&quot;a&quot;</span> + <span class="string">&quot;b&quot;</span>; <span class="comment">// javac 在编译期间的优化，结果已经在编译期确定为ab</span></span><br><span class="line"></span><br><span class="line">        System.out.println(s3 == s4); <span class="comment">// false</span></span><br><span class="line">        System.out.println(s3 == s5); <span class="comment">// true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>常量池最初存在于字节码文件中，当运行时，常量池中的信息会被加载到运行时常量池中， 这时a,b,ab都是常量池中的符号，没有变成java字符串对象，在执行到引用他那一行代码上时，才会把a符号变成对象，同时会准备好一块空间StringTable串池的空间，将生成的对象 “a” 作为 key，在串池中找，没有的话将刚生成的对象a放进串池中。</p>
+<div class="note green no-icon flat"><p><strong>注意</strong>：<strong>字符串字面量</strong>创建<strong>字符串对象</strong>是<strong>懒惰</strong>的，即只有执行到相应代码才会创建相应对象（和一般的类不同）并放入<strong>串池</strong>中。</p>
+</div>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">StringTable2</span> &#123;</span><br><span class="line">    <span class="comment">// StringTable [ &quot;a&quot;, &quot;b&quot;, &quot;ab&quot;]</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line"></span><br><span class="line">        <span class="type">String</span> <span class="variable">x</span> <span class="operator">=</span> <span class="string">&quot;ab&quot;</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 堆  new String(&quot;a&quot;)   new String(&quot;b&quot;)  new String(&quot;ab&quot;)</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">s</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&quot;a&quot;</span>) + <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&quot;b&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="type">String</span> <span class="variable">s2</span> <span class="operator">=</span> s.intern(); <span class="comment">// 将这个字符串对象尝试放入串池，如果有则并不会放入，如果没有则放入串池， 会把串池中的对象返回</span></span><br><span class="line"></span><br><span class="line">        System.out.println(x == s);  <span class="comment">// false 如果有则并不会放入</span></span><br><span class="line">        System.out.println(x == s2); <span class="comment">// true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>**intern()方法：**如果字符串s在字符串常量池中存在对应字面量，则intern()方法返回该字面量的地址；如果不存在，则创建一个对应的字面量，并返回该字面量的地址。</p>
+<p>经典面试题目：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">StringTable3</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">s1</span> <span class="operator">=</span> <span class="string">&quot;a&quot;</span>;</span><br><span class="line">        <span class="type">String</span> <span class="variable">s2</span> <span class="operator">=</span> <span class="string">&quot;b&quot;</span>;</span><br><span class="line">        <span class="type">String</span> <span class="variable">s3</span> <span class="operator">=</span> <span class="string">&quot;a&quot;</span> + <span class="string">&quot;b&quot;</span>;</span><br><span class="line">        <span class="type">String</span> <span class="variable">s4</span> <span class="operator">=</span> s1 + s2;</span><br><span class="line">        <span class="type">String</span> <span class="variable">s5</span> <span class="operator">=</span> <span class="string">&quot;ab&quot;</span>;</span><br><span class="line">        <span class="type">String</span> <span class="variable">s6</span> <span class="operator">=</span> s4.intern();</span><br><span class="line">        <span class="comment">// 问</span></span><br><span class="line">        System.out.println(s3 == s4); <span class="comment">// false</span></span><br><span class="line">        System.out.println(s3 == s5); <span class="comment">// true</span></span><br><span class="line">        System.out.println(s3 == s6); <span class="comment">// true</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">x2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&quot;c&quot;</span>) + <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&quot;d&quot;</span>);</span><br><span class="line">        <span class="type">String</span> <span class="variable">x1</span> <span class="operator">=</span> <span class="string">&quot;cd&quot;</span>;</span><br><span class="line">        x2.intern();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// x2.intern();</span></span><br><span class="line">        <span class="comment">// String x1 = &quot;cd&quot;;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 问，如果调换了【最后两行代码】的位置呢(true)，如果是jdk1.6呢(false)</span></span><br><span class="line">        System.out.println(x1 == x2); <span class="comment">// false</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="2-5-5-StringTable-特性">2.5.5 StringTable 特性</h4>
+<ul>
+<li>
+<p>常量池中的字符串仅是符号，第一次用到时才变为对象</p>
+</li>
+<li>
+<p>利用串池的机制，来避免重复创建字符串对象</p>
+</li>
+<li>
+<p>字符串变量拼接的原理是 StringBuilder （1.8）</p>
+</li>
+<li>
+<p>字符串常量拼接的原理是编译期优化</p>
+</li>
+<li>
+<p>可以使用 intern     方法，主动将串池中还没有的字符串对象放入串池</p>
+<ul>
+<li>1.8      将这个字符串对象尝试放入串池，如果有则并不会放入，如果没有则放入串池， 会把串池中的对象返回</li>
+<li>1.6      将这个字符串对象尝试放入串池，如果有则并不会放入，如果没有会把此对象复制一份，放入串池， 会把串池中的对象返回</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-5-6-StringTable-位置">2.5.6 StringTable 位置</h4>
+<p>JDK1.6 StringTable在永久代中</p>
+<p>JDK1.8 StringTable在堆中</p>
+<h4 id="5-7-StringTable-垃圾回收">5.7 StringTable 垃圾回收</h4>
+<p>StringTable存在垃圾回收</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">StringTableGC</span> &#123;</span><br><span class="line">    <span class="comment">// -Xmx10m -XX:+PrintStringTableStatistics -XX:+PrintGCDetails -verbose:gc</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; <span class="number">100000</span>; j++) &#123; <span class="comment">// j=100, j=10000</span></span><br><span class="line">                String.valueOf(j).intern();</span><br><span class="line">                i++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Throwable e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            System.out.println(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="2-5-8-StringTable-性能调优">2.5.8 StringTable 性能调优</h4>
+<ul>
+<li>调整 <code>-XX:StringTableSize=桶个数</code>
+<ul>
+<li>StringTable用hashtable实现的，存在hash冲突问题，桶的个数越多hash冲突越少。</li>
+</ul>
+</li>
+<li>考虑将字符串对象是否入池
+<ul>
+<li>当存在大量字符串，且可能存在大量重复的字符串，考虑入池（使用<code>intern()</code>）</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-6-直接内存-Direct-Memory">2.6 直接内存(Direct Memory)</h3>
+<h4 id="2-6-1-定义">2.6.1 定义</h4>
+<p>直接内存不属于JVM内存，而是属于系统内存</p>
+<ul>
+<li>常见于 NIO 操作时，用于数据缓冲区</li>
+<li>分配回收成本较高，但读写性能高</li>
+<li>不受 JVM 内存回收管理，而是通过Unsafe管理的</li>
+</ul>
+<ol>
+<li>一般文件的读写过程</li>
+</ol>
+<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://ysxnote.oss-cn-hangzhou.aliyuncs.com/imgs/posts/read-write-operator.png" alt="读写操作" style="zoom:80%;">
+<ol start="2">
+<li>直接内存</li>
+</ol>
+<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://ysxnote.oss-cn-hangzhou.aliyuncs.com/imgs/posts/direct-memory.png" alt="直接内存" style="zoom:80%;">
+<h4 id="2-6-2-分配和回收原理">2.6.2 分配和回收原理</h4>
+<ul>
+<li>使用了 Unsafe  对象完成直接内存的分配回收，并且回收需要主动调用 freeMemory 方法</li>
+<li>ByteBuffer 的实现类内部，使用了  Cleaner （虚引用）来监测 ByteBuffer 对象，一旦 ByteBuffer 对象被垃圾回收，那么就会由 ReferenceHandler  线程通过 Cleaner 的 clean 方法调用 freeMemory 来释放直接内存</li>
+</ul>
+<p>演示直接内存溢出：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DirectMemoryTest</span> &#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="type">int</span> <span class="variable">_100Mb</span> <span class="operator">=</span> <span class="number">1024</span> * <span class="number">1024</span> * <span class="number">100</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        List&lt;ByteBuffer&gt; list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">        <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">                <span class="type">ByteBuffer</span> <span class="variable">byteBuffer</span> <span class="operator">=</span> ByteBuffer.allocateDirect(_100Mb);</span><br><span class="line">                list.add(byteBuffer);</span><br><span class="line">                i++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            System.out.println(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>禁用显式回收对直接内存的影响：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DirectMemoryTest2</span> &#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="type">int</span> <span class="variable">_1Gb</span> <span class="operator">=</span> <span class="number">1024</span> * <span class="number">1024</span> * <span class="number">1024</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">     * -XX:+DisableExplicitGC 禁用显式的</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        <span class="type">ByteBuffer</span> <span class="variable">byteBuffer</span> <span class="operator">=</span> ByteBuffer.allocateDirect(_1Gb);</span><br><span class="line">        System.out.println(<span class="string">&quot;分配完毕...&quot;</span>);</span><br><span class="line">        System.in.read();</span><br><span class="line">        System.out.println(<span class="string">&quot;开始释放...&quot;</span>);</span><br><span class="line">        byteBuffer = <span class="literal">null</span>;</span><br><span class="line">        System.gc(); <span class="comment">// 显式的垃圾回收，Full GC</span></span><br><span class="line">        System.in.read();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>直接内存分配的底层原理：Unsafe</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DirectMemoryTest3</span> &#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="type">int</span> <span class="variable">_1Gb</span> <span class="operator">=</span> <span class="number">1024</span> * <span class="number">1024</span> * <span class="number">1024</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        <span class="type">Unsafe</span> <span class="variable">unsafe</span> <span class="operator">=</span> getUnsafe();</span><br><span class="line">        <span class="comment">// 分配内存</span></span><br><span class="line">        <span class="type">long</span> <span class="variable">base</span> <span class="operator">=</span> unsafe.allocateMemory(_1Gb);</span><br><span class="line">        unsafe.setMemory(base, _1Gb, (<span class="type">byte</span>) <span class="number">0</span>);</span><br><span class="line">        System.in.read();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 释放内存</span></span><br><span class="line">        unsafe.freeMemory(base);</span><br><span class="line">        System.in.read();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Unsafe <span class="title function_">getUnsafe</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="type">Field</span> <span class="variable">f</span> <span class="operator">=</span> Unsafe.class.getDeclaredField(<span class="string">&quot;theUnsafe&quot;</span>);</span><br><span class="line">            f.setAccessible(<span class="literal">true</span>);</span><br><span class="line">            <span class="type">Unsafe</span> <span class="variable">unsafe</span> <span class="operator">=</span> (Unsafe) f.get(<span class="literal">null</span>);</span><br><span class="line">            <span class="keyword">return</span> unsafe;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (NoSuchFieldException | IllegalAccessException e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</article><div class="post-copyright"><div class="post-copyright__title"><span class="post-copyright-info"><h>Java virtual machines 入门</h></span></div><div class="post-copyright__type"><span class="post-copyright-info"><a href="http://ysxnote.cn/posts/c0646373.html">http://ysxnote.cn/posts/c0646373.html</a></span></div><div class="post-copyright-m"><div class="post-copyright-m-info"><div class="post-copyright-a"><h>作者</h><div class="post-copyright-cc-info"><h>ysx</h></div></div><div class="post-copyright-c"><h>发布于</h><div class="post-copyright-cc-info"><h>2023-04-28</h></div></div><div class="post-copyright-u"><h>更新于</h><div class="post-copyright-cc-info"><h>2023-04-29</h></div></div><div class="post-copyright-c"><h>许可协议</h><div class="post-copyright-cc-info"><a class="icon" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a><a rel="noopener" target="_blank" title="CC BY-NC-SA 4.0" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a></div></div></div></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/JVM/">JVM</a></div><div class="post_share"><div class="social-share" data-image="https://ysxnote.oss-cn-hangzhou.aliyuncs.com/imgs/posts/jvm.png" data-sites="wechat,qq,weibo"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-full"><a href="/posts/151f44ae.html" title="ThreadLocal解析"><img class="cover" src="https://ysxnote.oss-cn-hangzhou.aliyuncs.com/imgs/posts/juc.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">ThreadLocal解析</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://ysxnote.oss-cn-hangzhou.aliyuncs.com/imgs/logo.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">ysx</div><div class="author-info__description">尘世白驹过隙，人情苍狗浮云</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">12</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><div class="card-info-social-icons is-center"><a class="social-icon" href="tencent://AddContact/?fromId=45&amp;fromSubId=1&amp;subcmd=all&amp;uin=2206405089&amp;website=www.oicqzone.com" target="_blank" title="QQ"><i class="iconfont icon-QQ1"></i></a><a class="social-icon" href="https://github.com/ysxGitHub" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:ysxone123@gmail.com" target="_blank" title="Email"><i class="iconfont icon-gmail"></i></a></div></div><div class="card-widget" id="card-poem"><div id="poem_sentence"></div><div id="poem_info"><div id="poem_dynasty"></div><div id="poem_author"></div></div></div><script src="https://cdn.jsdelivr.net/npm/js-heo@1.0.11/poem/jinrishici.js" charset="utf-8"></script><script type="text/javascript">jinrishici.load(function(result) {
+var sentence = document.querySelector("#poem_sentence")
+var author = document.querySelector("#poem_author")
+var dynasty = document.querySelector("#poem_dynasty")
+
+var sentenceText = result.data.content
+sentenceText = sentenceText.substr(0, sentenceText.length - 1);
+sentence.innerHTML = sentenceText
+dynasty.innerHTML = result.data.origin.dynasty
+author.innerHTML = result.data.origin.author + '《' + result.data.origin.title + '》'
+});</script><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%BC%95%E8%A8%80"><span class="toc-text">1. 引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E4%BB%80%E4%B9%88%E6%98%AF-JVM"><span class="toc-text">1.1 什么是 JVM ?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E5%B8%B8%E8%A7%81%E7%9A%84-JVM"><span class="toc-text">1.2 常见的 JVM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF"><span class="toc-text">1.3 学习路线</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%86%85%E5%AD%98%E7%BB%93%E6%9E%84"><span class="toc-text">2. 内存结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E7%A8%8B%E5%BA%8F%E8%AE%A1%E6%95%B0%E5%99%A8"><span class="toc-text">2.1 程序计数器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-1-%E5%AE%9A%E4%B9%89"><span class="toc-text">2.1.1 定义</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88"><span class="toc-text">2.2 虚拟机栈</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-1-%E5%AE%9A%E4%B9%89"><span class="toc-text">2.2.1 定义</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-2-%E6%A0%88%E5%86%85%E5%AD%98%E6%BA%A2%E5%87%BA-StackOverflow"><span class="toc-text">2.2.2 栈内存溢出 - StackOverflow</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-3-%E7%BA%BF%E7%A8%8B%E8%BF%90%E8%A1%8C%E8%AF%8A%E6%96%AD"><span class="toc-text">2.2.3 线程运行诊断</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E6%A0%88"><span class="toc-text">2.3 本地方法栈</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-%E5%A0%86"><span class="toc-text">2.4 堆</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-4-1-%E5%AE%9A%E4%B9%89"><span class="toc-text">2.4.1 定义</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-4-2-%E5%A0%86%E5%86%85%E5%AD%98%E6%BA%A2%E5%87%BA-OutOfMemoryError"><span class="toc-text">2.4.2 堆内存溢出 - OutOfMemoryError</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-4-3-%E5%A0%86%E5%86%85%E5%AD%98%E8%AF%8A%E6%96%AD"><span class="toc-text">2.4.3 堆内存诊断</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-%E6%96%B9%E6%B3%95%E5%8C%BA"><span class="toc-text">2.5 方法区</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-5-1-%E5%AE%9A%E4%B9%89"><span class="toc-text">2.5.1 定义</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-5-2-%E7%BB%84%E6%88%90"><span class="toc-text">2.5.2 组成</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-5-3-%E6%96%B9%E6%B3%95%E5%8C%BA%E5%86%85%E5%AD%98%E6%BA%A2%E5%87%BA"><span class="toc-text">2.5.3 方法区内存溢出</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-5-4-%E8%BF%90%E8%A1%8C%E6%97%B6%E5%B8%B8%E9%87%8F%E6%B1%A0"><span class="toc-text">2.5.4 运行时常量池</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-5-5-StringTable"><span class="toc-text">2.5.5 StringTable</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-5-5-StringTable-%E7%89%B9%E6%80%A7"><span class="toc-text">2.5.5 StringTable 特性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-5-6-StringTable-%E4%BD%8D%E7%BD%AE"><span class="toc-text">2.5.6 StringTable 位置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-7-StringTable-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6"><span class="toc-text">5.7 StringTable 垃圾回收</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-5-8-StringTable-%E6%80%A7%E8%83%BD%E8%B0%83%E4%BC%98"><span class="toc-text">2.5.8 StringTable 性能调优</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-6-%E7%9B%B4%E6%8E%A5%E5%86%85%E5%AD%98-Direct-Memory"><span class="toc-text">2.6 直接内存(Direct Memory)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-6-1-%E5%AE%9A%E4%B9%89"><span class="toc-text">2.6.1 定义</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-6-2-%E5%88%86%E9%85%8D%E5%92%8C%E5%9B%9E%E6%94%B6%E5%8E%9F%E7%90%86"><span class="toc-text">2.6.2 分配和回收原理</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/c0646373.html" title="Java virtual machines 入门"><img src="https://ysxnote.oss-cn-hangzhou.aliyuncs.com/imgs/posts/jvm.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Java virtual machines 入门"/></a><div class="content"><a class="title" href="/posts/c0646373.html" title="Java virtual machines 入门">Java virtual machines 入门</a><time datetime="2023-04-28T06:30:08.000Z" title="发表于 2023-04-28 14:30:08">2023-04-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/151f44ae.html" title="ThreadLocal解析"><img src="https://ysxnote.oss-cn-hangzhou.aliyuncs.com/imgs/posts/juc.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ThreadLocal解析"/></a><div class="content"><a class="title" href="/posts/151f44ae.html" title="ThreadLocal解析">ThreadLocal解析</a><time datetime="2023-04-27T14:04:33.000Z" title="发表于 2023-04-27 22:04:33">2023-04-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/85e99717.html" title="CompletableFuture 使用详情"><img src="https://ysxnote.oss-cn-hangzhou.aliyuncs.com/imgs/posts/juc.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="CompletableFuture 使用详情"/></a><div class="content"><a class="title" href="/posts/85e99717.html" title="CompletableFuture 使用详情">CompletableFuture 使用详情</a><time datetime="2023-04-26T13:03:34.000Z" title="发表于 2023-04-26 21:03:34">2023-04-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/3bc8daab.html" title="java并发基本知识的简单介绍（六）"><img src="https://ysxnote.oss-cn-hangzhou.aliyuncs.com/imgs/posts/juc.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="java并发基本知识的简单介绍（六）"/></a><div class="content"><a class="title" href="/posts/3bc8daab.html" title="java并发基本知识的简单介绍（六）">java并发基本知识的简单介绍（六）</a><time datetime="2023-04-22T13:33:49.000Z" title="发表于 2023-04-22 21:33:49">2023-04-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/5ec69172.html" title="java并发基本知识的简单介绍（五）"><img src="https://ysxnote.oss-cn-hangzhou.aliyuncs.com/imgs/posts/juc.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="java并发基本知识的简单介绍（五）"/></a><div class="content"><a class="title" href="/posts/5ec69172.html" title="java并发基本知识的简单介绍（五）">java并发基本知识的简单介绍（五）</a><time datetime="2023-04-19T13:05:14.000Z" title="发表于 2023-04-19 21:05:14">2023-04-19</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://ysxnote.oss-cn-hangzhou.aliyuncs.com/imgs/posts/jvm.png')"><div id="footer-wrap"><div class="footer_custom_text"><div style="font-size:13px;font-weight:bold">✨每一次离别都是为了下一次的相逢✨</div></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><a class="icon-V hidden" onclick="switchNightMode()" title="浅色和深色模式转换"><svg width="25" height="25" viewBox="0 0 1024 1024"><use id="modeicon" xlink:href="#icon-moon"></use></svg></a><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><div class="js-pjax"><script>(() => {
+  const $mermaidWrap = document.querySelectorAll('#article-container .mermaid-wrap')
+  if ($mermaidWrap.length) {
+    window.runMermaid = () => {
+      window.loadMermaid = true
+      const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+      Array.from($mermaidWrap).forEach((item, index) => {
+        const mermaidSrc = item.firstElementChild
+        const mermaidThemeConfig = '%%{init:{ \'theme\':\'' + theme + '\'}}%%\n'
+        const mermaidID = 'mermaid-' + index
+        const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+        mermaid.mermaidAPI.render(mermaidID, mermaidDefinition, (svgCode) => {
+          mermaidSrc.insertAdjacentHTML('afterend', svgCode)
+        })
+      })
+    }
+
+    const loadMermaid = () => {
+      window.loadMermaid ? runMermaid() : getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(runMermaid)
+    }
+
+    window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+  }
+})()</script><script>function loadGiscus () {
+  let nowTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light'
+
+  const config = Object.assign({
+    src: 'https://giscus.app/client.js',
+    'data-repo': 'ysxGitHub/ysxGitHub.github.io',
+    'data-repo-id': 'R_kgDOJSfZ1g',
+    'data-category-id': 'DIC_kwDOJSfZ1s4CVjLN',
+    'data-mapping': 'pathname',
+    'data-theme': nowTheme,
+    'data-reactions-enabled': '1',
+    crossorigin: 'anonymous',
+    async: true
+  },null)
+
+  let ele = document.createElement('script')
+  for (let key in config) {
+    ele.setAttribute(key, config[key])
+  }
+  document.getElementById('giscus-wrap').insertAdjacentElement('afterbegin',ele)
+}
+
+function changeGiscusTheme () {
+  const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light'
+
+  function sendMessage(message) {
+    const iframe = document.querySelector('iframe.giscus-frame');
+    if (!iframe) return;
+    iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+  }
+
+  sendMessage({
+    setConfig: {
+      theme: theme
+    }
+  });
+}
+
+if ('Giscus' === 'Giscus' || !true) {
+  if (true) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+  else loadGiscus()
+} else {
+  function loadOtherComment () {
+    loadGiscus()
+  }
+}</script></div><script async src="/js/cursor.js"></script><script async src="/js/title.js"></script><script async src="//npm.elemecdn.com/pace-js@1.2.4/pace.min.js"></script><script async src="/js/sun-moon.js" async></script><script async src="/js/grayscale.js"></script><script id="canvas_nest" defer="defer" color="57,197,187" opacity="0.7" zIndex="-1" count="99" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = true;
+document.body.addEventListener('input', POWERMODE);
+</script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="true" data-text="富强,民主,文明,和谐,自由,平等,公正,法治,爱国,敬业,诚信,友善" data-fontsize="16px" data-random="true" async="async"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/metingjs/dist/Meting.min.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["link[rel=\"canonical\"]","meta[property=\"og:image\"]","meta[property=\"og:title\"]","meta[property=\"og:url\"]","head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.tocScrollFn && window.removeEventListener('scroll', window.tocScrollFn)
+  window.scrollCollect && window.removeEventListener('scroll', scrollCollect)
+
+  document.getElementById('rightside').style.cssText = "opacity: ''; transform: ''"
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div><!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_footer_beautify_injector_config(){
+    var parent_div_git = document.getElementById('footer-wrap');
+    var item_html = '<div id="workboard"></div><p id="ghbdages"><a class="github-badge" target="_blank" href="https://hexo.io/" style="margin-inline:5px" data-title="博客框架为Hexo_v6.2.0" title=""><img src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&amp;logo=hexo" alt=""/></a><a class="github-badge" target="_blank" href="https://butterfly.js.org/" style="margin-inline:5px" data-title="主题版本Butterfly_v4.7.0" title=""><img src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&amp;logo=bitdefender" alt=""/></a><a class="github-badge" target="_blank" href="https://www.upyun.com/?utm_source=lianmeng&amp;utm_medium=referral" style="margin-inline:5px" data-title="本站由又拍云CDN加速" title=""><img src="https://img.shields.io/badge/CDN-%E5%8F%88%E6%8B%8D%E4%BA%91-00b6ff?style=flat&amp;logo=data:image/png;base64,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" alt=""/></a><a class="github-badge" target="_blank" href="https://beian.miit.gov.cn" style="margin-inline:5px" data-title="本站已备案" title=""><img src="https://img.shields.io/badge/%E8%B1%ABICP%E5%A4%87-2023007536%E5%8F%B7--1-e1d492?style=flat&amp;logo=data:image/png;base64,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" alt=""/></a><a class="github-badge" target="_blank" href="https://github.com/" style="margin-inline:5px" data-title="本站项目由Github托管" title=""><img src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&amp;logo=GitHub" alt=""/></a><a class="github-badge" target="_blank" href="https://vercel.com/" style="margin-inline:5px" data-title="本站采用多线部署，主线路托管于Vercel" title=""><img src="https://img.shields.io/badge/Hosted-Vercel-brightgreen?style=flat&amp;logo=Vercel" alt=""/></a><a class="github-badge" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" style="margin-inline:5px" data-title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可" title=""><img src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&amp;logo=Claris" alt=""/></a></p>';
+    console.log('已挂载butterfly_footer_beautify')
+    parent_div_git.insertAdjacentHTML("beforeend",item_html)
+    }
+  var elist = 'null'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_footer_beautify_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_footer_beautify_injector_config();
+  }
+  </script><script async src="/js/runtime.js"></script><script async src="//at.alicdn.com/t/font_2032782_8d5kxvn09md.js"></script><!-- hexo injector body_end end --></body></html>
