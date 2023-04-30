@@ -2,9 +2,9 @@
   font-family: "iconfont"; /* Project id 4004111 */
   /* Color fonts */
   src:
-       url('iconfont.woff2?t=1682838095261') format('woff2'),
-       url('iconfont.woff?t=1682838095261') format('woff'),
-       url('iconfont.ttf?t=1682838095261') format('truetype');
+       url('iconfont.woff2?t=1682861911758') format('woff2'),
+       url('iconfont.woff?t=1682861911758') format('woff'),
+       url('iconfont.ttf?t=1682861911758') format('truetype');
 }
 
 .iconfont {
@@ -13,6 +13,46 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-cplusplus:before {
+  content: "\eb6e";
+}
+
+.icon-jisuanji:before {
+  content: "\e60a";
+}
+
+.icon-ALGORITHM:before {
+  content: "\e7ee";
+}
+
+.icon-_qianduankaifa:before {
+  content: "\e612";
+}
+
+.icon-linux:before {
+  content: "\e80b";
+}
+
+.icon-java:before {
+  content: "\e639";
+}
+
+.icon-anzhuo:before {
+  content: "\e60c";
+}
+
+.icon-rengongzhineng:before {
+  content: "\e635";
+}
+
+.icon-a-22:before {
+  content: "\edbd";
+}
+
+.icon-biaoqian1:before {
+  content: "\e638";
 }
 
 .icon-biaoqian:before {
