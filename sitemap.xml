@@ -2,6 +2,24 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://ysxnote.cn/icon/download/font_4004111_2ulnsj95p9p/demo_index.html</loc>
+    
+    <lastmod>2023-04-30</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://ysxnote.cn/icon/download/font_4004111_2ulnsj95p9p/iconfont.json</loc>
+    
+    <lastmod>2023-04-30</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://ysxnote.cn/posts/c0646373.html</loc>
     
     <lastmod>2023-04-29</lastmod>

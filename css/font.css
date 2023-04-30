@@ -1,12 +1,15 @@
 @font-face {
     font-family: 'FiraCode';
+    font-style: normal;
+    font-weight: 400;
     font-display: swap;
     src: url('/fonts/FiraCode-Regular.woff2') format('woff2');
 }
 
 @font-face {
 	font-family: 'AlibabaPuHuiTi';
-    font-weight: 200;
+    font-style: normal;
+    font-weight: 400;
 	font-display: swap;
 	src: url('https://puhuiti.oss-cn-hangzhou.aliyuncs.com/AlibabaPuHuiTi-2/AlibabaPuHuiTi-2-55-Regular/AlibabaPuHuiTi-2-55-Regular.woff2') format('woff2');
 }
