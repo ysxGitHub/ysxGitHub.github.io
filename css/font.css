@@ -10,3 +10,11 @@
 	font-display: swap;
 	src: url('https://puhuiti.oss-cn-hangzhou.aliyuncs.com/AlibabaPuHuiTi-2/AlibabaPuHuiTi-2-55-Regular/AlibabaPuHuiTi-2-55-Regular.woff2') format('woff2');
 }
+
+@font-face {
+    font-family: 'AlimamaDongFangDaKai-Regular';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('https://puhuiti.oss-cn-hangzhou.aliyuncs.com/AlimamaDongFangDaKai/AlimamaDongFangDaKai-Regular/AlimamaDongFangDaKai-Regular.woff2') format('woff2');
+}

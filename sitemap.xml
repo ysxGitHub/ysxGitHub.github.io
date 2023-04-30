@@ -162,14 +162,14 @@
   </url>
   
   <url>
-    <loc>http://ysxnote.cn/tags/Site/</loc>
+    <loc>http://ysxnote.cn/tags/Hexo/</loc>
     <lastmod>2023-04-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>http://ysxnote.cn/tags/Hexo/</loc>
+    <loc>http://ysxnote.cn/tags/Site/</loc>
     <lastmod>2023-04-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
