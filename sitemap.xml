@@ -148,7 +148,7 @@
 
   <url>
     <loc>http://ysxnote.cn/</loc>
-    <lastmod>2023-04-29</lastmod>
+    <lastmod>2023-04-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -156,35 +156,35 @@
   
   <url>
     <loc>http://ysxnote.cn/tags/JUC/</loc>
-    <lastmod>2023-04-29</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://ysxnote.cn/tags/Hexo/</loc>
-    <lastmod>2023-04-29</lastmod>
+    <lastmod>2023-04-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://ysxnote.cn/tags/Site/</loc>
-    <lastmod>2023-04-29</lastmod>
+    <lastmod>2023-04-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>http://ysxnote.cn/tags/Algorithm/</loc>
-    <lastmod>2023-04-29</lastmod>
+    <loc>http://ysxnote.cn/tags/Hexo/</loc>
+    <lastmod>2023-04-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://ysxnote.cn/tags/JVM/</loc>
-    <lastmod>2023-04-29</lastmod>
+    <lastmod>2023-04-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://ysxnote.cn/tags/Algorithm/</loc>
+    <lastmod>2023-04-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
@@ -193,21 +193,21 @@
   
   <url>
     <loc>http://ysxnote.cn/categories/Java/</loc>
-    <lastmod>2023-04-29</lastmod>
+    <lastmod>2023-04-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://ysxnote.cn/categories/Other/</loc>
-    <lastmod>2023-04-29</lastmod>
+    <lastmod>2023-04-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://ysxnote.cn/categories/Code/</loc>
-    <lastmod>2023-04-29</lastmod>
+    <lastmod>2023-04-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
