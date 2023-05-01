@@ -85,3 +85,18 @@ div#archive {
 .fas.fa-bullhorn.fa-shake{
     color: red;
 }
+
+/* 超链接颜色 */
+#article-container a:hover {
+    color: #FF7242;
+}
+
+/* 标题颜色，好像没有用 */
+/* #article-container h2:hover h3:hover h4:hover h5:hover h6:hover {
+    color: #37AAF5;
+} */
+
+/* copyright的颜色 */
+#post .post-copyright-cc-info {
+    color: #99a9bf;
+}
