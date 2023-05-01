@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://ysxnote.cn/java/index.html</loc>
+    <loc>http://ysxnote.cn/posts/546129d5.html</loc>
     
     <lastmod>2023-05-01</lastmod>
     
@@ -20,27 +20,9 @@
   </url>
   
   <url>
-    <loc>http://ysxnote.cn/algorithm/linked-list-001.html</loc>
+    <loc>http://ysxnote.cn/ai/index.html</loc>
     
-    <lastmod>2023-04-30</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://ysxnote.cn/linux/index.html</loc>
-    
-    <lastmod>2023-04-30</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://ysxnote.cn/computer/index.html</loc>
-    
-    <lastmod>2023-04-30</lastmod>
+    <lastmod>2023-05-01</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -49,14 +31,41 @@
   <url>
     <loc>http://ysxnote.cn/C++/index.html</loc>
     
-    <lastmod>2023-04-30</lastmod>
+    <lastmod>2023-05-01</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>http://ysxnote.cn/ai/index.html</loc>
+    <loc>http://ysxnote.cn/computer/index.html</loc>
+    
+    <lastmod>2023-05-01</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://ysxnote.cn/linux/index.html</loc>
+    
+    <lastmod>2023-05-01</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://ysxnote.cn/java/index.html</loc>
+    
+    <lastmod>2023-05-01</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://ysxnote.cn/algorithm/linked-list-001.html</loc>
     
     <lastmod>2023-04-30</lastmod>
     
@@ -252,6 +261,13 @@
     <priority>0.2</priority>
   </url>
   
+  <url>
+    <loc>http://ysxnote.cn/tags/AI/</loc>
+    <lastmod>2023-05-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
 
   
   <url>
@@ -270,6 +286,13 @@
   
   <url>
     <loc>http://ysxnote.cn/categories/Code/</loc>
+    <lastmod>2023-05-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://ysxnote.cn/categories/Tutorial/</loc>
     <lastmod>2023-05-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
