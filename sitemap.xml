@@ -2,6 +2,24 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://ysxnote.cn/posts/546129d5.html</loc>
+    
+    <lastmod>2023-05-02</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://ysxnote.cn/java/index.html</loc>
+    
+    <lastmod>2023-05-02</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://ysxnote.cn/posts/cefa1eec.html</loc>
     
     <lastmod>2023-05-02</lastmod>
@@ -12,15 +30,6 @@
   
   <url>
     <loc>http://ysxnote.cn/posts/c0646373.html</loc>
-    
-    <lastmod>2023-05-02</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://ysxnote.cn/posts/546129d5.html</loc>
     
     <lastmod>2023-05-02</lastmod>
     
@@ -66,15 +75,6 @@
   
   <url>
     <loc>http://ysxnote.cn/linux/index.html</loc>
-    
-    <lastmod>2023-05-01</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://ysxnote.cn/java/index.html</loc>
     
     <lastmod>2023-05-01</lastmod>
     
