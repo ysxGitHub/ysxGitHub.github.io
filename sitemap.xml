@@ -2,6 +2,33 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://ysxnote.cn/posts/83e4bdbe.html</loc>
+    
+    <lastmod>2023-05-05</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://ysxnote.cn/posts/546129d5.html</loc>
+    
+    <lastmod>2023-05-04</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://ysxnote.cn/posts/bcd0724d.html</loc>
+    
+    <lastmod>2023-05-04</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://ysxnote.cn/posts/d3761ba4.html</loc>
     
     <lastmod>2023-05-04</lastmod>
@@ -56,15 +83,6 @@
   </url>
   
   <url>
-    <loc>http://ysxnote.cn/posts/bcd0724d.html</loc>
-    
-    <lastmod>2023-05-04</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>http://ysxnote.cn/posts/5ec69172.html</loc>
     
     <lastmod>2023-05-04</lastmod>
@@ -111,15 +129,6 @@
   
   <url>
     <loc>http://ysxnote.cn/posts/f6a1fd2d.html</loc>
-    
-    <lastmod>2023-05-04</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://ysxnote.cn/posts/546129d5.html</loc>
     
     <lastmod>2023-05-04</lastmod>
     
@@ -229,7 +238,7 @@
 
   <url>
     <loc>http://ysxnote.cn/</loc>
-    <lastmod>2023-05-04</lastmod>
+    <lastmod>2023-05-05</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -237,42 +246,42 @@
   
   <url>
     <loc>http://ysxnote.cn/tags/Stable-Diffusion/</loc>
-    <lastmod>2023-05-04</lastmod>
+    <lastmod>2023-05-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://ysxnote.cn/tags/JUC/</loc>
-    <lastmod>2023-05-04</lastmod>
+    <lastmod>2023-05-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://ysxnote.cn/tags/Hexo/</loc>
-    <lastmod>2023-05-04</lastmod>
+    <lastmod>2023-05-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://ysxnote.cn/tags/Site/</loc>
-    <lastmod>2023-05-04</lastmod>
+    <lastmod>2023-05-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://ysxnote.cn/tags/JVM/</loc>
-    <lastmod>2023-05-04</lastmod>
+    <lastmod>2023-05-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://ysxnote.cn/tags/Algorithm/</loc>
-    <lastmod>2023-05-04</lastmod>
+    <lastmod>2023-05-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
@@ -281,28 +290,28 @@
   
   <url>
     <loc>http://ysxnote.cn/categories/AI/</loc>
-    <lastmod>2023-05-04</lastmod>
+    <lastmod>2023-05-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://ysxnote.cn/categories/Java/</loc>
-    <lastmod>2023-05-04</lastmod>
+    <lastmod>2023-05-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://ysxnote.cn/categories/Other/</loc>
-    <lastmod>2023-05-04</lastmod>
+    <lastmod>2023-05-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://ysxnote.cn/categories/Code/</loc>
-    <lastmod>2023-05-04</lastmod>
+    <lastmod>2023-05-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
